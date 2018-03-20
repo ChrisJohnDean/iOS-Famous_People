@@ -23,7 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   
   func applicationDidFinishLaunching(_ application: UIApplication) {
-    
+    let isPreloaded = UserDefaults.standard.bool(forKey: "initial_data_added_to_database")
+    if !isPreloaded {
+      UserDefaults.standard.set(true, forKey: "initial_data_added_to_database")
+      let databaseManager = DatabaseManager()
+      databaseManager.openDatabase()
+      databaseManager.setupData()
+      //databaseManager.closeDatabase()
+    }
   }
 }
 

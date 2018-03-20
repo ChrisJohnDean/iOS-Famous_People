@@ -23,23 +23,40 @@ class FamousPeopleViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var searchBar: UISearchBar!
   
+  var peopleArray: [[String: String]]?
+  
   override func viewDidLoad() {
     super.viewDidLoad()
+    let databaseManager = DatabaseManager()
+    databaseManager.openDatabase()
+    peopleArray = databaseManager.getAllPeople(withNameLike: "Kennedy")
   }
   
   func searchForPeople(withName name: String) {
     print("search for people with name: \(name)")
   }
+  
 }
 
 extension FamousPeopleViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 0
+    return (peopleArray?.count)!
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    return UITableViewCell()
+    
+//    ToDoTableViewCell *toDoCell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+//    ToDo *toDoObject = self.toDoObjects[indexPath.row];
+//
+//    toDoCell.titleLabel.text = toDoObject.title;
+    let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+    let personDict = peopleArray![indexPath.row]
+    let personName = personDict["first_name"]
+    
+    cell?.textLabel?.text = personName
+    
+    return cell!
   }
 }
 
